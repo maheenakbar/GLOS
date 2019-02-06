@@ -1,0 +1,13 @@
+{% block content %}
+  	<h1>GLOS!</h1>
+  	<h2>Enter your search term.</h2>
+  	<form method="POST" action="/result">
+      	{{ form.hidden_tag() }}
+
+      	{% for message in get_flashed_messages() %} 
+      	{{ message }}
+      	{% endfor %}
+      	<p>{{ form.search.label }}{{ form.search() }}</p>
+      	{{ form.submit() }}
+  	</form>
+{% endblock %}
