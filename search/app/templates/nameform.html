@@ -1,13 +1,21 @@
-{% block content %}
-  	<h1>GLOS!</h1>
-  	<h2>Enter your search term.</h2>
-  	<form method="POST" action="/result">
-      	{{ form.hidden_tag() }}
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-      	{% for message in get_flashed_messages() %} 
-      	{{ message }}
-      	{% endfor %}
-      	<p>{{ form.search.label }}{{ form.search() }}</p>
-      	{{ form.submit() }}
-  	</form>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
+{% block content %}
+    <h1>GLOS!</h1>
+    <h2>Enter your search term.</h2>
+    <form method="POST" action="/result">
+        {{ form.hidden_tag() }}
+
+        {% for message in get_flashed_messages() %} 
+        {{ message }}
+        {% endfor %}
+        <div class="input-field">
+        <p>{{ form.search.label }}{{ form.search() }}</p>
+        {{ form.submit() }}
+        </div>
+    </form>
 {% endblock %}
