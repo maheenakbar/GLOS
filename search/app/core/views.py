@@ -5,7 +5,7 @@ from flask import Flask, request, render_template, redirect, url_for, flash, mak
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import Required
-from app.core.ignore.apikey import *
+# from app.core.ignore.apikey import *
 
 import requests
 import json

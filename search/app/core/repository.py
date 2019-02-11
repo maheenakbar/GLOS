@@ -1,5 +1,5 @@
 from app.core.models.resource import Resource
-
+API_KEY = "AIzaSyB3GPYS9Nyoy6lKARgD-xK7CjAkY0QYvac"
 class Repository():
 
     def getResources(self):
