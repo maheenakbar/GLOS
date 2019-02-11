@@ -5,6 +5,7 @@ from flask import Flask, request, render_template, redirect, url_for, flash, mak
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import Required
+from app.core.ignore.apikey import *
 
 import requests
 import json
@@ -34,7 +35,7 @@ class NameForm(FlaskForm):
 @mod.route('/')
 def index():
     nameForm = NameForm()
-    return render_template('nameform.html', form=nameForm)
+    return render_template('nameform.html', form=nameForm, api_key=API_KEY)
 
 @mod.route('/result', methods = ['GET', 'POST'])
 def showDadForm():
