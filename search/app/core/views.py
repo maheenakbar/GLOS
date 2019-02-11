@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for, \
                   abort, jsonify
-from app.core.repository import *
+from app.core.repositor import *
 from flask import Flask, request, render_template, redirect, url_for, flash, make_response
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
