@@ -1,10 +1,11 @@
 from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for, \
                   abort, jsonify
-from app.core.repository import *
+from app.core.repositor import *
 from flask import Flask, request, render_template, redirect, url_for, flash, make_response
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import Required
+# from app.core.ignore.apikey import *
 
 import requests
 import json
@@ -34,7 +35,7 @@ class NameForm(FlaskForm):
 @mod.route('/')
 def index():
     nameForm = NameForm()
-    return render_template('nameform.html', form=nameForm)
+    return render_template('nameform.html', form=nameForm, api_key=API_KEY)
 
 @mod.route('/result', methods = ['GET', 'POST'])
 def showDadForm():
