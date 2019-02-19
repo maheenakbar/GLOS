@@ -11,15 +11,17 @@
     <style>
        /* Set the size of the div element that contains the map */
       #map {
-        height: 50%;  /* The height is 400 pixels */
-        width: 100%;  /* The width is the width of the web page */
+        height: 100%;  /* The height is the height of the div */
+        width: 100%;  /* The width is the width of the div */
        }
     </style>
   </head>
   <body>
-    <h1>Great Lakes Observing System Metadata Search</h1>
-    <!--The div element for the map -->
-    <div id="map"></div>
+  <div class="row">
+    <div class="col s9 push-s3">
+      <!--The div element for the map -->
+      <div id="map"></div>
+      </div>
     <script>
 // Initialize and add the map
 function initMap() {
@@ -87,20 +89,25 @@ function setMarkers(map) {
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap">
     </script>
- 
-    <h2>Enter your search term.</h2>
-    <!-- <p>{{id_coords_list_of_tuples}}</p> -->
-    <form method="POST" action="/result">
-        {{ form.hidden_tag() }}
+    <div class="col s3 pull-s9">
+      <!-- <div class="valign-wrapper"> -->
+        <img class="responsive-img" src="https://cdn.ioos.noaa.gov/media/2017/12/GLOS-logo.jpg">
+        <h2>Enter your search term.</h2>
+        <!-- <p>{{id_coords_list_of_tuples}}</p> -->
+        <form method="POST" action="/result">
+            {{ form.hidden_tag() }}
 
-        {% for message in get_flashed_messages() %} 
-        {{ message }}
-        {% endfor %}
-        <div class="input-field">
-        <p>{{ form.search.label }}{{ form.search() }}</p>
-        {{ form.submit() }}
-        </div>
-    </form>
+            {% for message in get_flashed_messages() %} 
+            {{ message }}
+            {% endfor %}
+            <div class="input-field">
+            <p>{{ form.search.label }}{{ form.search() }}</p>
+            {{ form.submit() }}
+            </div>
+        </form>
+      <!-- </div> -->
+    </div>
+  </div>
  </body>
 </html>
 {% endblock %}
