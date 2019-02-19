@@ -11,27 +11,73 @@
     <style>
        /* Set the size of the div element that contains the map */
       #map {
-        height: 400px;  /* The height is 400 pixels */
+        height: 50%;  /* The height is 400 pixels */
         width: 100%;  /* The width is the width of the web page */
        }
     </style>
   </head>
   <body>
-    <h3>Test</h3>
+    <h1>Great Lakes Observing System Metadata Search</h1>
     <!--The div element for the map -->
     <div id="map"></div>
     <script>
 // Initialize and add the map
 function initMap() {
-  // The location of Ann Arbor
-  // 42.2808° N, 83.7430° W
-  var A2 = {lat: 42.2808, lng: -83.7430};
-  // The map, centered at Uluru
-  var map = new google.maps.Map(
-      document.getElementById('map'), {zoom: 10, center: A2});
-  // The marker, positioned at Uluru
-  var marker = new google.maps.Marker({position: A2, map: map});
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 7,
+    // centered at Ann Arbor, MI
+    center: {lat: 42.2808, lng: -83.7430}
+  });
+
+  setMarkers(map);
 }
+
+var locations = {{id_coords_list_of_tuples|safe}};
+// Set markers function
+// #######################
+// #######################
+// #######################
+function setMarkers(map) {
+  // Adds markers to the map.
+
+  // Marker sizes are expressed as a Size of X,Y where the origin of the image
+  // (0,0) is located in the top left of the image.
+
+  // Origins, anchor positions and coordinates of the marker increase in the X
+  // direction to the right and in the Y direction down.
+  var image = {
+    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+    // This marker is 20 pixels wide by 32 pixels high.
+    size: new google.maps.Size(20, 32),
+    // The origin for this image is (0, 0).
+    origin: new google.maps.Point(0, 0),
+    // The anchor for this image is the base of the flagpole at (0, 32).
+    anchor: new google.maps.Point(0, 32)
+  };
+  // Shapes define the clickable region of the icon. The type defines an HTML
+  // <area> element 'poly' which traces out a polygon as a series of X,Y points.
+  // The final coordinate closes the poly by connecting to the first coordinate.
+  var shape = {
+    coords: [1, 1, 1, 20, 18, 20, 18, 1],
+    type: 'poly'
+  };
+  for (var i = 0; i < locations.length; i++) {
+    var location = locations[i];
+    var marker = new google.maps.Marker({
+      position: {lat: location[2], lng: location[1]},
+      map: map,
+      icon: image,
+      shape: shape,
+      title: location[0],
+      zIndex: location[3]
+    });
+  }
+}
+// #######################
+// #######################
+// #######################
+
+
     </script>
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
@@ -41,10 +87,9 @@ function initMap() {
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap">
     </script>
-  </body>
-</html>
-    <h1>GLOS!</h1>
+ 
     <h2>Enter your search term.</h2>
+    <!-- <p>{{id_coords_list_of_tuples}}</p> -->
     <form method="POST" action="/result">
         {{ form.hidden_tag() }}
 
@@ -56,4 +101,6 @@ function initMap() {
         {{ form.submit() }}
         </div>
     </form>
+ </body>
+</html>
 {% endblock %}
