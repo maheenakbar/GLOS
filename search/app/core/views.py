@@ -5,37 +5,29 @@ from flask import Flask, request, render_template, redirect, url_for, flash, mak
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import Required
-# from app.core.ignore.apikey import *
 
 import requests
 import json
-mod = Blueprint('core', __name__)
+import pandas as pd
 
-# @mod.route('/')
-# def index():
-#   repository = Repository()
-#   return (render_template('core/index.html', resources=repository.getResources()))
+df = pd.read_csv('clean_metadata.csv') 
+df = df.transpose()
+metadata_dict = df.to_dict()
+id_coords_list_of_tuples = []
+for record in metadata_dict.keys():
+    if type(metadata_dict[record]['geoBox']) == str:
+        id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1])
+
+mod = Blueprint('core', __name__)
 
 class NameForm(FlaskForm):
     search = StringField('What is your search term?', validators=[Required()])
     submit = SubmitField('Submit')
     
-############################
-# Two error handler routes #
-############################
-
-# @app.errorhandler(404)
-# def four_oh_four(error):
-#     return render_template('thats_a_404.html'), 404
-
-# @app.errorhandler(403)
-# def four_oh_three(error):
-#     return render_template('thats_a_503.html'), 403
-
 @mod.route('/')
 def index():
     nameForm = NameForm()
-    return render_template('nameform.html', form=nameForm, api_key=API_KEY)
+    return render_template('nameform.html', form=nameForm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples))
 
 @mod.route('/result', methods = ['GET', 'POST'])
 def showDadForm():
