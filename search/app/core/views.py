@@ -35,15 +35,37 @@ def showDadForm():
     if request.method == 'POST' and form.search.data != "":
         searchTerm = form.search.data
 
-    ####################
-    # Setting a cookie #
-    ####################
+        results = {'title':"sorry nothing here"}
+        list_of_tups = id_coords_list_of_tuples
+        ## GRABBING TEST DATA - SEARCH BY ID
+        # for tup in id_coords_list_of_tuples:
+        #     if searchTerm in str(tup[0]):
+        #     #results = tup
+        #         for record in metadata_dict:
+        #             if metadata_dict[record]['id'] == tup[0]:
+                        # results = metadata_dict[record]
+
+        for record in metadata_dict:
+            if metadata_dict[record]['id'] == searchTerm:
+                results = metadata_dict[record]
+                #print(len(metadata_dict[record]['geoBox']))
+                for tup in id_coords_list_of_tuples:
+                    if metadata_dict[record]['id'] == str(tup[0]):
+                        list_of_tups = [tup]
+                try:
+                    list_of_tups = [[metadata_dict[record]['id'], float(str(metadata_dict[record]['geoBox']).split()[0]),float(str(metadata_dict[record]['geoBox']).split()[2]),1]]
+                except: 
+                    pass
+
+        ####################
+        # Setting a cookie #
+        ####################
 
         response = make_response('<h1>This document carries a cookie!</h1>')
         response.set_cookie('Search', searchTerm)
     
         # dadForm = DadForm()
-        return render_template('result.html', searchTerm=searchTerm)
+        return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(list_of_tups), results=results)
     else:
         flash('All fields are required!')
         return redirect(url_for('index'))
