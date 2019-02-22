@@ -5,6 +5,110 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 {% block content %}
-  <h1>Your search term was: {{ searchTerm }}!</h1>
-  
+<!DOCTYPE html>
+<html>
+  <head>
+  	<style>
+  		/* Set the size of the div element that contains the map */
+		#map {
+        	height: 40%;  /* The height is the height of the div */
+        	width: 100%;  /* The width is the width of the div */
+       	}
+      .logo {
+        width: 100%;  /* The width is the width of the div */
+       }
+       .results {
+       	background-color:teal;
+       	height:100%;
+       }
+
+    </style>
+  </head>
+  <body>
+
+<div class="row">
+    <div class="col s9 push-s3">
+      <!--The div element for the map -->
+      <div class="results">{{ results['title'] }}</div>
+    </div>
+
+	<div class="col s3 pull-s9">
+      <!-- <div class="valign-wrapper"> -->
+        <img class="logo" src="https://cdn.ioos.noaa.gov/media/2017/12/GLOS-logo.jpg">
+        <p>Your search term was: <strong>{{ searchTerm }}</strong></p>
+        <!-- <p>{{id_coords_list_of_tuples}}</p> -->
+      <!-- </div> -->
+      <div id="map"></div>
+    </div>
+    <script>
+// Initialize and add the map
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 7,
+    // centered at Ann Arbor, MI
+    center: {lat: 42.2808, lng: -83.7430}
+  });
+
+  setMarkers(map);
+}
+
+var locations = {{id_coords_list_of_tuples|safe}};
+// Set markers function
+// #######################
+// #######################
+// #######################
+function setMarkers(map) {
+  // Adds markers to the map.
+
+  // Marker sizes are expressed as a Size of X,Y where the origin of the image
+  // (0,0) is located in the top left of the image.
+
+  // Origins, anchor positions and coordinates of the marker increase in the X
+  // direction to the right and in the Y direction down.
+  var image = {
+    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+    // This marker is 20 pixels wide by 32 pixels high.
+    size: new google.maps.Size(20, 32),
+    // The origin for this image is (0, 0).
+    origin: new google.maps.Point(0, 0),
+    // The anchor for this image is the base of the flagpole at (0, 32).
+    anchor: new google.maps.Point(0, 32)
+  };
+  // Shapes define the clickable region of the icon. The type defines an HTML
+  // <area> element 'poly' which traces out a polygon as a series of X,Y points.
+  // The final coordinate closes the poly by connecting to the first coordinate.
+  var shape = {
+    coords: [1, 1, 1, 20, 18, 20, 18, 1],
+    type: 'poly'
+  };
+  for (var i = 0; i < locations.length; i++) {
+    var location = locations[i];
+    var marker = new google.maps.Marker({
+      position: {lat: location[2], lng: location[1]},
+      map: map,
+      icon: image,
+      shape: shape,
+      title: location[0],
+      zIndex: location[3]
+    });
+  }
+}
+// #######################
+// #######################
+// #######################
+
+
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap">
+    </script>
+</div>
+
+  </body>
+</html>
 {% endblock %}
