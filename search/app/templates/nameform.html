@@ -1,5 +1,9 @@
 <!-- Compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+</script>
 
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -22,7 +26,13 @@
       <!--The div element for the map -->
       <div id="map"></div>
       </div>
-    <script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+// var instance = M.Collapsible.getInstance(elem);
+
 // Initialize and add the map
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -81,6 +91,7 @@ function setMarkers(map) {
 
 
     </script>
+
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
     * The key parameter will contain your own API key (which is not needed for this tutorial)
@@ -89,6 +100,7 @@ function setMarkers(map) {
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap">
     </script>
+
     <div class="col s3 pull-s9">
       <!-- <div class="valign-wrapper"> -->
         <img class="responsive-img" src="https://cdn.ioos.noaa.gov/media/2017/12/GLOS-logo.jpg">
@@ -101,11 +113,33 @@ function setMarkers(map) {
             {{ message }}
             {% endfor %}
             <div class="input-field">
-            <p>{{ form.search.label }}{{ form.search() }}</p>
-            {{ form.submit() }}
+              <p>{{ form.search.label }}{{ form.search() }}</p>
+              
+              
+            
+            <!-- https://materializecss.com/collapsible.html -->
+            <ul class="collapsible">
+              <li>
+                <div class="collapsible-header"><i class="material-icons">whatshot</i>Advanced Search</div>
+                <div class="collapsible-body">
+                  <span>Here is where the advanced search fields will be</span>
+                  <div class="input-field">
+                    <p>{{ form.advanced1.label }}{{ form.advanced1() }}</p>
+                    <p>{{ form.advanced2.label }}{{ form.advanced2() }}</p>
+                    <p>{{ form.advanced3.label }}{{ form.advanced3() }}</p>
+                    <p>{{ form.advanced4.label }}{{ form.advanced4() }}</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <!-- <a class="waves-effect waves-light btn">{{ form.submit() }}</a> -->
+            <button class="btn waves-effect waves-light cyan darken-1" type="submit" name="action">{{ form.submit() }}
+    <i class="material-icons right">send</i>
+  </button>
+            
+            <script>$('.collapsible').collapsible();</script>
             </div>
         </form>
-      <!-- </div> -->
     </div>
   </div>
  </body>
