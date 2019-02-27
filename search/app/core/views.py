@@ -22,11 +22,7 @@ mod = Blueprint('core', __name__)
 
 class NameForm(FlaskForm):
     search = StringField('What is your search term?', validators=[Required()])
-    advanced1 = StringField('advanced1')
-    advanced2 = StringField('advanced2')
-    advanced3 = StringField('advanced3')
-    advanced4 = StringField('advanced4')
-    submit = SubmitField('')
+    submit = SubmitField('Submit')
     
 @mod.route('/')
 def index():
@@ -39,27 +35,23 @@ def showDadForm():
     if request.method == 'POST' and form.search.data != "":
         searchTerm = form.search.data
 
-        results = {'title':"sorry nothing here"}
+        #results = {'title':"sorry nothing here"}
+        results = [{'title':"sorry nothing here",'keyword':'nada','abstract':'also nada'}]
         list_of_tups = id_coords_list_of_tuples
-        ## GRABBING TEST DATA - SEARCH BY ID
-        # for tup in id_coords_list_of_tuples:
-        #     if searchTerm in str(tup[0]):
-        #     #results = tup
-        #         for record in metadata_dict:
-        #             if metadata_dict[record]['id'] == tup[0]:
-                        # results = metadata_dict[record]
 
         for record in metadata_dict:
-            if metadata_dict[record]['id'] == searchTerm:
-                results = metadata_dict[record]
-                #print(len(metadata_dict[record]['geoBox']))
-                for tup in id_coords_list_of_tuples:
-                    if metadata_dict[record]['id'] == str(tup[0]):
-                        list_of_tups = [tup]
-                try:
-                    list_of_tups = [[metadata_dict[record]['id'], float(str(metadata_dict[record]['geoBox']).split()[0]),float(str(metadata_dict[record]['geoBox']).split()[2]),1]]
-                except: 
-                    pass
+            if type(metadata_dict[record]['keyword']) == type('str'):
+                print([w.upper() for w in metadata_dict[record]['keyword'].split()])
+                if searchTerm.upper() in [w.upper() for w in metadata_dict[record]['keyword'].split()]:
+                    curr = metadata_dict[record]
+                    results.append(curr)
+                # for tup in id_coords_list_of_tuples:
+                #     if curr['id'] == str(tup[0]):
+                #         list_of_tups = [tup]
+                # try:
+                #     list_of_tups = [[curr['id'], float(str(curr['geoBox']).split()[0]),float(str(curr['geoBox']).split()[2]),1]]
+                # except: 
+                #     pass
 
         ####################
         # Setting a cookie #
@@ -69,7 +61,7 @@ def showDadForm():
         response.set_cookie('Search', searchTerm)
     
         # dadForm = DadForm()
-        return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(list_of_tups), results=results)
+        return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples), results=results, results_len=len(results))
     else:
         flash('All fields are required!')
         return redirect(url_for('index'))
