@@ -4,6 +4,9 @@
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 {% block content %}
 <!DOCTYPE html>
 <html>
@@ -17,9 +20,15 @@
       .logo {
         width: 100%;  /* The width is the width of the div */
        }
-       .results {
-       	background-color:teal;
-       	height:100%;
+       h1.results {
+       	font-size: 20px;
+       }
+       h2.results {
+       	font-size: 16px;
+       }
+       .card-results {
+       	background-color: #4898B9;
+       	color: white;
        }
 
     </style>
@@ -28,8 +37,17 @@
 
 <div class="row">
     <div class="col s9 push-s3">
-      <!--The div element for the map -->
-      <div class="results">{{ results['title'] }}</div>
+      <div class="w3-container">
+  		<h2>View your search results here:</h2>
+
+  			{%for i in results[1:] %}
+    		<div class="w3-panel w3-card card-results">
+    			<h1 class="results">{{ i['title'] }}</h1>
+    			<h2 class="results">{{ i['keyword'] }}</h2>
+    			<p>{{ i['abstract'] }}</p>
+    		</div>
+			{%endfor%} 
+	  </div>
     </div>
 
 	<div class="col s3 pull-s9">
@@ -52,7 +70,7 @@ function initMap() {
   setMarkers(map);
 }
 
-var locations = {{id_coords_list_of_tuples|safe}};
+var locations = {{ id_coords_list_of_tuples|safe }};
 // Set markers function
 // #######################
 // #######################
