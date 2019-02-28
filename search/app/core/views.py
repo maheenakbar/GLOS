@@ -22,7 +22,11 @@ mod = Blueprint('core', __name__)
 
 class NameForm(FlaskForm):
     search = StringField('What is your search term?', validators=[Required()])
-    submit = SubmitField('Submit')
+    advanced1 = StringField('Advanced1')
+    advanced2 = StringField('Advanced2')
+    advanced3 = StringField('Advanced3')
+    advanced4 = StringField('Advanced4')
+    submit = SubmitField('')
     
 @mod.route('/')
 def index():
