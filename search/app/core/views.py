@@ -10,6 +10,12 @@ import requests
 import json
 import pandas as pd
 
+import elasticsearch
+from elasticsearch import Elasticsearch
+
+host_url = ['https://search-glos-metadata-jy4xxxs6o26fgmdj7guj32nvje.us-east-2.es.amazonaws.com']
+es_conn = Elasticsearch(host_url)
+
 df = pd.read_csv('clean_metadata.csv') 
 df = df.transpose()
 metadata_dict = df.to_dict()
@@ -39,16 +45,23 @@ def showDadForm():
     if request.method == 'POST' and form.search.data != "":
         searchTerm = form.search.data
 
-        #results = {'title':"sorry nothing here"}
-        results = [{'title':"sorry nothing here",'keyword':'nada','abstract':'also nada'}]
-        list_of_tups = id_coords_list_of_tuples
+        results = es_conn.search(index="metadata", body={"query": {"match": {'keyword':searchTerm}}})
+        for hit in results['hits']['hits']:
+            print(hit['_source']['title'])
+            print(hit['_source']['keyword'])
+            print(hit['_source']['abstract'])
+             
 
-        for record in metadata_dict:
-            if type(metadata_dict[record]['keyword']) == type('str'):
-                print([w.upper() for w in metadata_dict[record]['keyword'].split()])
-                if searchTerm.upper() in [w.upper() for w in metadata_dict[record]['keyword'].split()]:
-                    curr = metadata_dict[record]
-                    results.append(curr)
+        #results = {'title':"sorry nothing here"}
+        # results = [{'title':"sorry nothing here",'keyword':'nada','abstract':'also nada'}]
+        # list_of_tups = id_coords_list_of_tuples
+
+        # for record in metadata_dict:
+        #     if type(metadata_dict[record]['keyword']) == type('str'):
+        #         # print([w.upper() for w in metadata_dict[record]['keyword'].split()])
+        #         if searchTerm.upper() in [w.upper() for w in metadata_dict[record]['keyword'].split()]:
+        #             curr = metadata_dict[record]
+        #             results.append(curr)
                 # for tup in id_coords_list_of_tuples:
                 #     if curr['id'] == str(tup[0]):
                 #         list_of_tups = [tup]
