@@ -41,11 +41,13 @@
   		<h2>View your search results here:</h2>
 
   			{%for hit in results['hits']['hits'] %}
+        <a href={{hit['_source']['link']}}>
     		<div class="w3-panel w3-card card-results">
     			<h1 class="results">{{ hit['_source']['title'] }}</h1>
     			<h2 class="results">{{ hit['_source']['keyword'] }}</h2>
     			<p>{{ hit['_source']['abstract'] }}</p>
     		</div>
+        </a>
 			{%endfor%} 
 	  </div>
     </div>
