@@ -8,7 +8,7 @@ from wtforms.validators import Required
 
 import requests
 import json
-import pandas as pd
+# import pandas as pd
 
 import elasticsearch
 from elasticsearch import Elasticsearch
@@ -16,13 +16,16 @@ from elasticsearch import Elasticsearch
 host_url = ['https://search-glos-metadata-jy4xxxs6o26fgmdj7guj32nvje.us-east-2.es.amazonaws.com']
 es_conn = Elasticsearch(host_url)
 
-df = pd.read_csv('clean_metadata.csv') 
-df = df.transpose()
-metadata_dict = df.to_dict()
-id_coords_list_of_tuples = []
-for record in metadata_dict.keys():
-    if type(metadata_dict[record]['geoBox']) == str:
-        id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1])
+# id_coords_list_of_tuples is now imported from repositor.py
+
+# df = pd.read_csv('clean_metadata.csv') 
+# df = df.transpose()
+# metadata_dict = df.to_dict()
+# id_coords_list_of_tuples = []
+# for record in metadata_dict.keys():
+#     if type(metadata_dict[record]['geoBox']) == str:
+#         id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1])
+
 
 mod = Blueprint('core', __name__)
 
