@@ -64,14 +64,14 @@
 // Initialize and add the map
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 7,
+    zoom: 3,
     // centered at Ann Arbor, MI
     center: {lat: 42.2808, lng: -83.7430}
   });
 
   setMarkers(map);
 }
-
+var searchResults = {{ searchResults|safe }};
 var locations = {{ id_coords_list_of_tuples|safe }};
 // Set markers function
 // #######################
@@ -85,15 +85,15 @@ function setMarkers(map) {
 
   // Origins, anchor positions and coordinates of the marker increase in the X
   // direction to the right and in the Y direction down.
-  var image = {
-    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-    // This marker is 20 pixels wide by 32 pixels high.
-    size: new google.maps.Size(20, 32),
-    // The origin for this image is (0, 0).
-    origin: new google.maps.Point(0, 0),
-    // The anchor for this image is the base of the flagpole at (0, 32).
-    anchor: new google.maps.Point(0, 32)
-  };
+  // var image = {
+  //   url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+  //   // This marker is 20 pixels wide by 32 pixels high.
+  //   size: new google.maps.Size(20, 32),
+  //   // The origin for this image is (0, 0).
+  //   origin: new google.maps.Point(0, 0),
+  //   // The anchor for this image is the base of the flagpole at (0, 32).
+  //   anchor: new google.maps.Point(0, 32)
+  // };
   // Shapes define the clickable region of the icon. The type defines an HTML
   // <area> element 'poly' which traces out a polygon as a series of X,Y points.
   // The final coordinate closes the poly by connecting to the first coordinate.
@@ -101,21 +101,24 @@ function setMarkers(map) {
     coords: [1, 1, 1, 20, 18, 20, 18, 1],
     type: 'poly'
   };
-  for (var i = 0; i < locations.length; i++) {
-    var location = locations[i];
-    var marker = new google.maps.Marker({
-      position: {lat: location[2], lng: location[1]},
-      map: map,
-      icon: image,
-      shape: shape,
-      title: location[0],
-      zIndex: location[3]
-    });
+
+// Plot locations for results
+
+  for (var i = 0; i < searchResults.length; i++) {
+      var searchResult = searchResults[i];
+      var marker = new google.maps.Marker({
+        position: {lat: searchResult[2], lng: searchResult[1]},
+        map: map,
+        icon: {                             
+          url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"                           
+        },
+        shape: shape,
+        title: searchResult[-1],
+        zIndex: 1
+      });
+    }
   }
-}
-// #######################
-// #######################
-// #######################
+
 
 
     </script>

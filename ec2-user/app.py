@@ -41,26 +41,33 @@ def resultSearchForm():
         searchTerm = form.search.data
 
         results = es_conn.search(index="metadata", body={"query": {"match": {'keyword':searchTerm}}})
+        resultPlotList = []
         for hit in results['hits']['hits']:
-            print(hit['_source']['title'])
-            print(hit['_source']['keyword'])
-            print(hit['_source']['abstract'])
+            hit['geoList'] = hit['_source']['geoBox'].split()
+            hit['geoList'] = [float(i) for i in hit['geoList']]
+            hit['geoList'].append(hit['_source']['title'])
+            print(hit['geoList'])
+            resultPlotList.append(hit['geoList'])
+            # print(hit['geoList'])
              
+        print(resultPlotList)
 
-        return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples), results=results, results_len=len(results))
+        return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples), results=results, results_len=len(results), searchResults=json.dumps(resultPlotList))
     else:
         flash('All fields are required!')
         return redirect(url_for('index'))
 
+
+
 ##############################
 # Use this for running locally
 ##############################
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 ##############################
 # Use this for running on AWS
 ##############################
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0", port=80)
