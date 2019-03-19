@@ -4,6 +4,38 @@ from io import StringIO
 import numpy as np
 import json
 import requests
+from elasticsearch import Elasticsearch
+from elasticsearch.helpers import bulk
+
+host_url = ['https://search-glos-metadata-jy4xxxs6o26fgmdj7guj32nvje.us-east-2.es.amazonaws.com']
+
+def sanitize(value):
+    if isinstance(value, numbers.Number) and math.isnan(value):
+        return None
+    else:
+        return value
+
+def parse_metadata(metadata_df):
+    for index, row in metadata_df.iterrows():
+        yield {'_id' : index,
+        'schema' : sanitize(row[0]),
+        'uuid' : sanitize(row[1]), 
+        'id' : sanitize(row[2]), 
+        'title' : sanitize(row[3]), 
+        'abstract' : sanitize(row[4]), 
+        'keyword' : sanitize(row[5]),
+        'link' : sanitize(row[6]),
+        'responsibleParty' : sanitize(row[7]),
+        'metadatacreationdate' : sanitize(row[8]),
+        'geoBox' : sanitize(row[9]),
+        'image' : sanitize(row[10]),
+        'LegalConstraints' : sanitize(row[11]),
+        'temporalExtent' : sanitize(row[12]),
+        'parentId' : sanitize(row[13]),
+        'datasetcreationdate' : sanitize(row[14]),
+        'Constraints' : sanitize(row[15]),
+        'SecurityConstraints' : sanitize(row[16])
+              }
 
 url = 'http://data.glos.us/metadata/srv/eng/csv.search?'
 r = requests.get(url, allow_redirects=True)
@@ -28,4 +60,9 @@ with open('metadata.txt',errors='ignore') as f:
 	df['geoBox'] = df['geoBox'].str.replace('###', ' ', regex=True)
 	df['SecurityConstraints'] = df['SecurityConstraints'].str.replace('".', "", regex=True)
 
+    es_conn = Elasticsearch(host_url)
+
+	bulk(es_conn, parse_metadata(df), index = 'metadata', doc_type = 'record')
+
 	export_csv = df.to_csv(r'clean_metadata2.csv', index = None, header=True)
+
