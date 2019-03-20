@@ -60,9 +60,9 @@ with open('metadata.txt',errors='ignore') as f:
 	df['geoBox'] = df['geoBox'].str.replace('###', ' ', regex=True)
 	df['SecurityConstraints'] = df['SecurityConstraints'].str.replace('".', "", regex=True)
 
-    es_conn = Elasticsearch(host_url)
+ #    es_conn = Elasticsearch(host_url)
 
-	bulk(es_conn, parse_metadata(df), index = 'metadata', doc_type = 'record')
+	# bulk(es_conn, parse_metadata(df), index = 'metadata', doc_type = 'record')
 
 	export_csv = df.to_csv(r'clean_metadata2.csv', index = None, header=True)
 

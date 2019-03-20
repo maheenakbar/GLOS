@@ -13,6 +13,7 @@ import json
 
 from repositor import *
 from config import *
+import pandas as pd
 import elasticsearch
 from elasticsearch import Elasticsearch
 
@@ -20,6 +21,19 @@ app.config['SECRET_KEY'] = SECRET_KEY
 host_url = ['https://search-glos-metadata-jy4xxxs6o26fgmdj7guj32nvje.us-east-2.es.amazonaws.com']
 es_conn = Elasticsearch(host_url)
 
+df = pd.read_csv('clean_metadata.csv') 
+df = df.transpose()
+metadata_dict = df.to_dict()
+# print(metadata_dict)
+id_coords_list_of_tuples = []
+for record in metadata_dict.keys():
+    if type(metadata_dict[record]['geoBox']) == str:
+        try:
+            id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1, metadata_dict[record]['keyword']])
+        except:
+            pass
+
+print(id_coords_list_of_tuples)
 
 class SearchForm(FlaskForm):
     search = StringField('What is your search term?', validators=[Required()])
@@ -43,10 +57,13 @@ def resultSearchForm():
         results = es_conn.search(index="metadata", body={"query": {"match": {'keyword':searchTerm}}})
         resultPlotList = []
         for hit in results['hits']['hits']:
-            hit['geoList'] = hit['_source']['geoBox'].split()
-            hit['geoList'] = [float(i) for i in hit['geoList']]
-            hit['geoList'].append(hit['_source']['title'])
-            print(hit['geoList'])
+            try:
+                hit['geoList'] = hit['_source']['geoBox'].split()
+                hit['geoList'] = [float(i) for i in hit['geoList']]
+                hit['geoList'].append(hit['_source']['title'])
+                print(hit['geoList'])
+            except:
+                hit['geoList'] = []
             resultPlotList.append(hit['geoList'])
             # print(hit['geoList'])
              

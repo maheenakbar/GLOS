@@ -78,7 +78,9 @@ function setMarkers(map) {
     var marker = new google.maps.Marker({
       position: {lat: location[2], lng: location[1]},
       map: map,
-      icon: image,
+      icon: {                             
+          url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"                           
+        },
       shape: shape,
       title: location[0],
       zIndex: location[3]
