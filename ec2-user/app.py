@@ -33,7 +33,7 @@ for record in metadata_dict.keys():
         except:
             pass
 
-print(id_coords_list_of_tuples)
+# print(id_coords_list_of_tuples)
 
 class SearchForm(FlaskForm):
     search = StringField('What is your search term?', validators=[Required()])
@@ -61,13 +61,14 @@ def resultSearchForm():
                 hit['geoList'] = hit['_source']['geoBox'].split()
                 hit['geoList'] = [float(i) for i in hit['geoList']]
                 hit['geoList'].append(hit['_source']['title'])
-                print(hit['geoList'])
+                # print(hit['geoList'])
+      
+                resultPlotList.append(hit['geoList'])
             except:
-                hit['geoList'] = []
-            resultPlotList.append(hit['geoList'])
+                pass
             # print(hit['geoList'])
              
-        print(resultPlotList)
+        # print(resultPlotList)
 
         return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples), results=results, results_len=len(results), searchResults=json.dumps(resultPlotList))
     else:
@@ -79,12 +80,12 @@ def resultSearchForm():
 ##############################
 # Use this for running locally
 ##############################
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
 
 ##############################
 # Use this for running on AWS
 ##############################
-# if __name__ == "__main__":
-#     app.run(host="0.0.0.0", port=80)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80)
