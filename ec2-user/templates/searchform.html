@@ -51,21 +51,7 @@ var locations = {{id_coords_list_of_tuples|safe}};
 // #######################
 function setMarkers(map) {
   // Adds markers to the map.
-
-  // Marker sizes are expressed as a Size of X,Y where the origin of the image
-  // (0,0) is located in the top left of the image.
-
-  // Origins, anchor positions and coordinates of the marker increase in the X
-  // direction to the right and in the Y direction down.
-  var image = {
-    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-    // This marker is 20 pixels wide by 32 pixels high.
-    size: new google.maps.Size(20, 32),
-    // The origin for this image is (0, 0).
-    origin: new google.maps.Point(0, 0),
-    // The anchor for this image is the base of the flagpole at (0, 32).
-    anchor: new google.maps.Point(0, 32)
-  };
+  
   // Shapes define the clickable region of the icon. The type defines an HTML
   // <area> element 'poly' which traces out a polygon as a series of X,Y points.
   // The final coordinate closes the poly by connecting to the first coordinate.
@@ -73,23 +59,33 @@ function setMarkers(map) {
     coords: [1, 1, 1, 20, 18, 20, 18, 1],
     type: 'poly'
   };
-
+  // The infowindow is instantiated before the loop that creates all markers.
+  // This is the box that appears when a marker is clicked.
   var infowindow = new google.maps.InfoWindow();
-
+  // A loop is used to create a marker from each location in the list of locations.
   for (var i = 0; i < locations.length; i++) {
     var location = locations[i];
     var marker = new google.maps.Marker({
+      // The third element of each location is the latitude value.
+      // The fourth element of each location is the longitude value.
+      // These values are selected from the original list of values in the 'geoBox' field. 
+      // This combination yielded what seemed to be the most accurate location.
       position: {lat: location[2], lng: location[1]},
       map: map,
       icon: {                             
           url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"                           
         },
       shape: shape,
+      // The title is the first element in the list
       title: location[0],
+      // A zIndex value is assigned to all location list elements, but is not used.
+      // This is a placeholder in case some markers are chosen to be oriented on top of others.
+      // All zIndex values are currently '1'.
       zIndex: location[3] 
     });
-    // var contentString = location[0];
-    
+    // a click event listener is added to each marker which creates an infowindow and adds the title and a link.
+    // The link passed to the search page is the first link in the list of links from the metadata record.
+    // This first link was chosen because we determined that it was the most important for each record.
     google.maps.event.addListener(marker, 'click', (function (marker, i) {
                 return function () {
                     infowindow.setContent(locations[i][4]+'</br><a href='+locations[i][5]+' target="_blank">link</a>');
@@ -108,7 +104,7 @@ function setMarkers(map) {
 
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
-    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The key parameter will contain your own API key
     * The callback parameter executes the initMap() function
     -->
     <script async defer
