@@ -73,6 +73,9 @@ function setMarkers(map) {
     coords: [1, 1, 1, 20, 18, 20, 18, 1],
     type: 'poly'
   };
+
+  var infowindow = new google.maps.InfoWindow();
+
   for (var i = 0; i < locations.length; i++) {
     var location = locations[i];
     var marker = new google.maps.Marker({
@@ -83,15 +86,17 @@ function setMarkers(map) {
         },
       shape: shape,
       title: location[0],
-      zIndex: location[3]
+      zIndex: location[3] 
     });
-    var contentString = location[0]
-    var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
-    marker.addListener('click', function() {
-          infowindow.open(map, marker);
-        });
+    // var contentString = location[0];
+    
+    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                return function () {
+                    infowindow.setContent(locations[i][4]+'</br><a href='+locations[i][5]+' target="_blank">link</a>');
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+    
   }
 }
 // #######################

@@ -29,7 +29,7 @@ id_coords_list_of_tuples = []
 for record in metadata_dict.keys():
     if type(metadata_dict[record]['geoBox']) == str:
         try:
-            id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1, metadata_dict[record]['keyword']])
+            id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1, metadata_dict[record]['title'], metadata_dict[record]['link'].split()[0]])
         except:
             pass
 
@@ -80,12 +80,12 @@ def resultSearchForm():
 ##############################
 # Use this for running locally
 ##############################
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 ##############################
 # Use this for running on AWS
 ##############################
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0", port=80)
