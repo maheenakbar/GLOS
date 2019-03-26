@@ -65,6 +65,14 @@ function setMarkers(map) {
   // A loop is used to create a marker from each location in the list of locations.
   for (var i = 0; i < locations.length; i++) {
     var location = locations[i];
+    var color = location[6];
+    // var checkTitle = location[0];
+    // var subst = 'bouy';
+    // if (checkTitle.includes(subst)){
+    //   color = 'blue';
+    // }else{
+    //   color = 'red';
+    // }
     var marker = new google.maps.Marker({
       // The third element of each location is the latitude value.
       // The fourth element of each location is the longitude value.
@@ -73,7 +81,7 @@ function setMarkers(map) {
       position: {lat: location[2], lng: location[1]},
       map: map,
       icon: {                             
-          url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"                           
+          url: "http://maps.google.com/mapfiles/ms/icons/"+color+"-dot.png"                           
         },
       shape: shape,
       // The title is the first element in the list

@@ -29,7 +29,14 @@ id_coords_list_of_tuples = []
 for record in metadata_dict.keys():
     if type(metadata_dict[record]['geoBox']) == str:
         try:
-            id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1, metadata_dict[record]['title'], metadata_dict[record]['link'].split()[0]])
+            s1 = set(metadata_dict[record]['title'].upper().split())
+            s2 = set(['BUOY'])
+            if s1.intersection(s2):
+                color = 'blue'
+            else:
+                color = 'red'
+            id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1, metadata_dict[record]['title'], metadata_dict[record]['link'].split()[0], color])
+            
         except:
             pass
 
