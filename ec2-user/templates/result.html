@@ -31,6 +31,29 @@
        	color: white;
        }
 
+       .button {
+          background-color: #2F4372;
+          border: none;
+          color: white;
+          padding: 8px 16px;
+          margin: 4px 2px;
+          -webkit-transition-duration: 0.4s; /* Safari */
+          transition-duration: 0.4s;
+          cursor: pointer;
+        }
+
+        .card-keywords {
+        background-color: white;
+        color: #4898B9;
+        border-radius: 8px;
+       }
+
+       .card-keywords:hover {
+        background-color: #2F4372;
+        color: white;
+       }
+
+
     </style>
   </head>
   <body>
@@ -44,7 +67,11 @@
         <a href={{hit['_source']['link']}}>
     		<div class="w3-panel w3-card card-results">
     			<h1 class="results">{{ hit['_source']['title'] }}</h1>
-    			<h2 class="results">{{ hit['_source']['keyword'] }}</h2>
+    			<div class="w3-section">
+            {%for kw in hit['_source']['keyword'].split(',') %}
+            <button class="button card-keywords">{{ kw }}</button>
+            {%endfor%}
+          </div>
     			<p>{{ hit['_source']['abstract'] }}</p>
     		</div>
         </a>
@@ -52,10 +79,22 @@
 	  </div>
     </div>
 
-	<div class="col s3 pull-s9">
+<div class="col s3 pull-s9">
       <!-- <div class="valign-wrapper"> -->
         <img class="logo" src="https://cdn.ioos.noaa.gov/media/2017/12/GLOS-logo.jpg">
-        <p>Your search term was: <strong>{{ searchTerm }}</strong></p>
+        <div>
+          <h2>Enter your search term.</h2>
+        <!-- <p>{{id_coords_list_of_tuples}}</p> -->
+        <form method="POST" action="/result">
+            {{ form.hidden_tag() }}
+
+            {% for message in get_flashed_messages() %} 
+            {{ message }}
+            {% endfor %}
+            <div class="input-field">
+              <p>{{ form.search.label }}{{ form.search() }}</p>
+        </div>
+
         <!-- <p>{{id_coords_list_of_tuples}}</p> -->
       <!-- </div> -->
       <div id="map"></div>
