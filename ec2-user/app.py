@@ -77,7 +77,7 @@ def resultSearchForm():
              
         # print(resultPlotList)
 
-        return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples), results=results, results_len=len(results), searchResults=json.dumps(resultPlotList))
+        return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples), results=results, results_len=len(results), searchResults=json.dumps(resultPlotList),form=form)
     else:
         flash('All fields are required!')
         return redirect(url_for('index'))
