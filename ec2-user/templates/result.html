@@ -57,29 +57,11 @@
     </style>
   </head>
   <body>
-
 <div class="row">
-    <div class="col s9 push-s3">
-      <div class="w3-container">
-  		<h2>View your search results here:</h2>
-
-  			{%for hit in results['hits']['hits'] %}
-        <a href={{hit['_source']['link']}}>
-    		<div class="w3-panel w3-card card-results">
-    			<h1 class="results">{{ hit['_source']['title'] }}</h1>
-    			<div class="w3-section">
-            {%for kw in hit['_source']['keyword'].split(',') %}
-            <button class="button card-keywords">{{ kw }}</button>
-            {%endfor%}
-          </div>
-    			<p>{{ hit['_source']['abstract'] }}</p>
-    		</div>
-        </a>
-			{%endfor%} 
-	  </div>
-    </div>
-
-<div class="col s3 pull-s9">
+<div></div>
+</div>
+<div class="row">
+<div class="col l3 s12">
       <!-- <div class="valign-wrapper"> -->
         <img class="logo" src="https://cdn.ioos.noaa.gov/media/2017/12/GLOS-logo.jpg">
         <div>
@@ -170,6 +152,25 @@ function setMarkers(map) {
     src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap">
     </script>
 </div>
+<div class="col l9 s12">
+      <div class="w3-container">
+      <h2>View your search results here:</h2>
+
+        {%for hit in results['hits']['hits'] %}
+        <a href={{hit['_source']['link']}}>
+        <div class="w3-panel w3-card card-results">
+          <h1 class="results">{{ hit['_source']['title'] }}</h1>
+          <div class="w3-section">
+            {%for kw in hit['_source']['keyword'].split(',') %}
+            <button class="button card-keywords">{{ kw }}</button>
+            {%endfor%}
+          </div>
+          <p>{{ hit['_source']['abstract'] }}</p>
+        </div>
+        </a>
+      {%endfor%} 
+    </div>
+    </div>
 
   </body>
 </html>

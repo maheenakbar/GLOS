@@ -21,11 +21,11 @@
     </style>
   </head>
   <body>
-  <div class="row">
-    <div class="col s9 push-s3">
-      <!--The div element for the map -->
+  <!-- <div class="row">
+    <div class="col l9 push-l3 s12">
+      The div element for the map 
       <div id="map"></div>
-      </div>
+      </div> -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.collapsible');
@@ -108,22 +108,26 @@ function setMarkers(map) {
 // #######################
 
 
-    </script>
+</script>
 
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
     * The key parameter will contain your own API key
     * The callback parameter executes the initMap() function
     -->
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap">
-    </script>
-
-    <div class="col s3 pull-s9">
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap">
+</script>
+<!-- top div adds space between left / top column and top of browser -->
+<div class="row">
+  <div class="col l3 s12">
+  </div>
+</div>
+<div class="row">
+    <div class="col l3 s12">
       <!-- <div class="valign-wrapper"> -->
         <img class="responsive-img" src="https://cdn.ioos.noaa.gov/media/2017/12/GLOS-logo.jpg">
         <h2>Enter your search term.</h2>
-        <!-- <p>{{id_coords_list_of_tuples}}</p> -->
         <form method="POST" action="/result">
             {{ form.hidden_tag() }}
 
@@ -138,16 +142,18 @@ function setMarkers(map) {
             <!-- https://materializecss.com/collapsible.html -->
             <ul class="collapsible">
               <li>
-                <div class="collapsible-header"><i class="material-icons">whatshot</i>Advanced Search</div>
-                <div class="collapsible-body">
-                  <span>Here is where the advanced search fields will be</span>
-                  <div class="input-field">
-                    <p>{{ form.advanced1.label }}{{ form.advanced1() }}</p>
-                    <p>{{ form.advanced2.label }}{{ form.advanced2() }}</p>
-                    <p>{{ form.advanced3.label }}{{ form.advanced3() }}</p>
-                    <p>{{ form.advanced4.label }}{{ form.advanced4() }}</p>
-                  </div>
+                <div class="collapsible-header">
+                  <i class="material-icons">whatshot</i>Advanced Search
                 </div>
+                  <div class="collapsible-body">
+                    <span>Here is where the advanced search fields will be</span>
+                    <div class="input-field">
+                      <p>{{ form.advanced1.label }}{{ form.advanced1() }}</p>
+                      <p>{{ form.advanced2.label }}{{ form.advanced2() }}</p>
+                      <p>{{ form.advanced3.label }}{{ form.advanced3() }}</p>
+                      <p>{{ form.advanced4.label }}{{ form.advanced4() }}</p>
+                    </div>
+                  </div>
               </li>
             </ul>
             <!-- <a class="waves-effect waves-light btn">{{ form.submit() }}</a> -->
@@ -161,62 +167,35 @@ function setMarkers(map) {
 <!-- cards -->
 <div class="row">
     <div class="col s4">
-    <!-- <a href="#"> -->
       <div class="card cyan darken-1">
         <div class="card-content white-text">
-          <span class="card-title">Query One?</span></div>
+          <span class="card-title">Query One?</span>
+        </div>
           <a class="btn-floating halfway-fab waves-effect waves-light blue lighten-2"><i class="material-icons">send</i></a>
-          
-          <!-- <p>...</p> -->
-        
-        <!-- <div class="card-action">
-          <a href="#">This is a link</a>
-          <a href="#">RESULTS</a>
-        </div> -->
       </div>
     </div>
-    <!-- </a> -->
-  <!-- </div> -->
-
-  <!-- <div class="row"> -->
+    
     <div class="col s4">
-    <!-- <a href="#"> -->
       <div class="card cyan darken-2">
         <div class="card-content white-text">
           <span class="card-title">Query Two?</span>
-          <!-- <p>...</p> -->
         </div>
         <a class="btn-floating halfway-fab waves-effect waves-light blue lighten-2"><i class="material-icons">send</i></a>
-        <!-- <div class="card-action">
-          <a href="#">This is a link</a>
-          <a href="#">RESULTS</a>
-        </div> -->
       </div>
     </div>
-    <!-- </a> -->
-  <!-- </div> -->
-
-  <!-- <div class="row"> -->
     <div class="col s4">
-    <!-- <a href="#"> -->
       <div class="card cyan darken-3">
         <div class="card-content white-text">
           <span class="card-title">Query three?</span>
-          <!-- <p>...</p> -->
         </div>
         <a class="btn-floating halfway-fab waves-effect waves-light blue lighten-2"><i class="material-icons">send</i></a>
-        <!-- <div class="card-action">
-          <a href="#">This is a link</a>
-          <a href="#">RESULTS</a>
-        </div> -->
       </div>
     </div>
-    <!-- </a> -->
   </div>
-
-<!-- cards -->
-    </div>
-  </div>
+</div>
+    <div class="col l9 s12">
+      <div id="map"></div>
+      </div>
  </body>
 </html>
 {% endblock %}
