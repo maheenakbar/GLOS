@@ -1,4 +1,4 @@
-#A version of this script can be run as a cron job to download the metadata text file daily
+#A version of this script can be run as a cron job to download the metadata text file regularly
 import pandas as pd
 from io import StringIO
 import numpy as np
@@ -6,6 +6,9 @@ import json
 import requests
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
+import numbers
+import math
+import certifi
 
 host_url = ['https://search-glos-metadata-jy4xxxs6o26fgmdj7guj32nvje.us-east-2.es.amazonaws.com']
 
@@ -54,15 +57,15 @@ with open('metadata.txt',errors='ignore') as f:
 	df['abstract'] = df['abstract'].str.replace('</h4>', ' ', regex=True)
 	df['abstract'] = df['abstract'].str.replace('<span>', ' ', regex=True)
 	df['abstract'] = df['abstract'].str.replace('</span>', ' ', regex=True)
-	df['keyword'] = df['keyword'].str.replace('###', ' ', regex=True)
+	df['keyword'] = df['keyword'].str.replace('###', ',', regex=True)
 	df['link'] = df['link'].str.replace('###', ' ', regex=True)
 	df['responsibleParty'] = df['responsibleParty'].str.replace('###', ' ', regex=True)
 	df['geoBox'] = df['geoBox'].str.replace('###', ' ', regex=True)
 	df['SecurityConstraints'] = df['SecurityConstraints'].str.replace('".', "", regex=True)
 
-    es_conn = Elasticsearch(host_url)
+es_conn = Elasticsearch(host_url, ca_certs = certifi.where())
 
-	bulk(es_conn, parse_metadata(df), index = 'metadata', doc_type = 'record')
+bulk(es_conn, parse_metadata(df), index = 'metadata', doc_type = 'record')
 
-	export_csv = df.to_csv(r'clean_metadata2.csv', index = None, header=True)
+export_csv = df.to_csv(r'clean_metadata2.csv', index = None, header=True)
 
