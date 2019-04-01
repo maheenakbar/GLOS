@@ -44,10 +44,10 @@ for record in metadata_dict.keys():
 
 class SearchForm(FlaskForm):
     search = StringField('What is your search term?', validators=[Required()])
-    advanced1 = StringField('Advanced1')
-    advanced2 = StringField('Advanced2')
-    advanced3 = StringField('Advanced3')
-    advanced4 = StringField('Advanced4')
+    advanced1 = StringField('Date Range:')
+    advanced2 = StringField('Title Includes:')
+    advanced3 = StringField('Link Includes')
+    advanced4 = StringField('Abstract Includes:')
     submit = SubmitField('')
     
 @app.route('/')
