@@ -29,17 +29,24 @@ id_coords_list_of_tuples = []
 for record in metadata_dict.keys():
     if type(metadata_dict[record]['geoBox']) == str:
         try:
+            if int(metadata_dict[record]['metadatacreationdate'][:4])>2017:
+                active = '<i class="material-icons md-24 right">whatshot</i>'
+            else:
+                active = ''
+        except:
+            active = 'inactive'
+        try:
             s1 = set(metadata_dict[record]['title'].upper().split())
             s2 = set(['BUOY'])
             if s1.intersection(s2):
                 color = 'blue'
             else:
                 color = 'red'
-            id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1, metadata_dict[record]['title'], metadata_dict[record]['link'].split()[0], color])
-            
+            # print(active)
+            id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1, metadata_dict[record]['title'], metadata_dict[record]['link'].split()[0], color, active])
         except:
             pass
-
+# metadata_dict['record']['metadatacreationdate'], metadata_dict['record']['datasetcreationdate']
 # print(id_coords_list_of_tuples)
 
 class SearchForm(FlaskForm):
