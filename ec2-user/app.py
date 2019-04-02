@@ -49,12 +49,13 @@ for record in metadata_dict.keys():
 # metadata_dict['record']['metadatacreationdate'], metadata_dict['record']['datasetcreationdate']
 # print(id_coords_list_of_tuples)
 
+
 class SearchForm(FlaskForm):
     search = StringField('What is your search term?', validators=[Required()])
-    advanced1 = StringField('Date Range:')
-    advanced2 = StringField('Title Includes:')
-    advanced3 = StringField('Link Includes')
-    advanced4 = StringField('Abstract Includes:')
+    advanced1 = StringField('Title includes')
+    advanced2 = StringField('Link includes')
+    advanced3 = StringField('Abstract includes')
+    advanced4 = StringField('Date range')
     submit = SubmitField('')
     
 @app.route('/')
@@ -68,14 +69,33 @@ def resultSearchForm():
     if request.method == 'POST' and form.search.data != "":
         searchTerm = form.search.data
 
-        results = es_conn.search(index="metadata", body={"query": {"match": {'keyword':searchTerm}}})
+        # if there are no inputs in the advanced search fields
+        if (form.advanced1.data == "" and form.advanced2.data == "" and form.advanced3.data == "" and form.advanced4.data == ""):
+            results = es_conn.search(index="metadata", body={"query": {"match": {'keyword':searchTerm}}})
+            #results = es_conn.search(index="metadata", doc_type = 'record', body={"query": {"multi_match": {'query': searchTerm, 'fields': ['schema', 'title', 'abstract', 'keyword']}}})
+
+        else:
+            titleSearch = form.advanced1.data
+            linkSearch = form.advanced2.data
+            abstractSearch = form.advanced3.data
+            dateSearch = form.advanced4.data
+
+            bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
+            results = es_conn.search(index="metadata", body=bodyString)
+            
+            
+            
+        
+        #for item in results.keys:
+        #    print (item)
         resultPlotList = []
+
         for hit in results['hits']['hits']:
             try:
                 hit['geoList'] = hit['_source']['geoBox'].split()
                 hit['geoList'] = [float(i) for i in hit['geoList']]
                 hit['geoList'].append(hit['_source']['title'])
-                # print(hit['geoList'])
+                #print(hit['geoList'])
       
                 resultPlotList.append(hit['geoList'])
             except:
@@ -83,6 +103,7 @@ def resultSearchForm():
             # print(hit['geoList'])
              
         # print(resultPlotList)
+
 
         return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples), results=results, results_len=len(results), searchResults=json.dumps(resultPlotList),form=form)
     else:
