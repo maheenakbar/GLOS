@@ -55,7 +55,7 @@ class SearchForm(FlaskForm):
     advanced1 = StringField('Title includes')
     advanced2 = StringField('Link includes')
     advanced3 = StringField('Abstract includes')
-    advanced4 = StringField('Date range')
+    advanced4 = StringField('Year range')
     submit = SubmitField('')
     
 @app.route('/')
@@ -78,10 +78,41 @@ def resultSearchForm():
             titleSearch = form.advanced1.data
             linkSearch = form.advanced2.data
             abstractSearch = form.advanced3.data
-            dateSearch = form.advanced4.data
+            yearSearch = form.advanced4.data
 
-            bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
-            results = es_conn.search(index="metadata", body=bodyString)
+            #bodyString2 = {"query": { "bool": { "must": [ { "range": { float("metadatacreationdate"[0:4]): float(yearSearch[0:4])-float(yearSearch[5:9]) }}, { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
+
+            #bodyString2 = {"query": { "bool": { "must": [ { "range": { float("metadatacreationdate"[0:4]): { "gte": int(yearSearch[0:4]), "lte": int(yearSearch[5:9]) }}}, { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
+
+            if (titleSearch and linkSearch and abstractSearch):
+
+                bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
+                results = es_conn.search(index="metadata", body=bodyString)
+
+            elif (titleSearch and linkSearch and not abstractSearch):
+                bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}]}}}
+                results = es_conn.search(index="metadata", body=bodyString)
+
+            elif (titleSearch and not linkSearch and abstractSearch):
+                bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "abstract": abstractSearch}}]}}}
+                results = es_conn.search(index="metadata", body=bodyString)
+
+            elif (titleSearch and not linkSearch and not abstractSearch):
+                bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}]}}}
+                results = es_conn.search(index="metadata", body=bodyString)
+
+            elif (not titleSearch and linkSearch and abstractSearch):
+                bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
+                results = es_conn.search(index="metadata", body=bodyString)
+
+            elif (not titleSearch and linkSearch and not abstractSearch):
+                bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "link": linkSearch }}]}}}
+                results = es_conn.search(index="metadata", body=bodyString)
+
+            elif (not titleSearch and not linkSearch and abstractSearch):
+                bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "abstract": abstractSearch}}]}}}
+                results = es_conn.search(index="metadata", body=bodyString)
+
             
             
             
