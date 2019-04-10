@@ -17,40 +17,50 @@ import pandas as pd
 import elasticsearch
 from elasticsearch import Elasticsearch
 
+#secret key is necessary for flask-form operation. It works sort of like a checksum.
 app.config['SECRET_KEY'] = SECRET_KEY
+#this value will be replaced by the AWS elasticsearch instance URL.
 host_url = ['https://search-glos-metadata-jy4xxxs6o26fgmdj7guj32nvje.us-east-2.es.amazonaws.com']
+#establish a connection to the elasticsearch instance
 es_conn = Elasticsearch(host_url)
 
-df = pd.read_csv('clean_metadata.csv') 
+#create a dataframe of the cleaned metadata export.
+df = pd.read_csv('clean_metadata.csv')
+#rotate the dataframe 90 degrees. 
 df = df.transpose()
+#create a python dictionary from the dataframe
 metadata_dict = df.to_dict()
-# print(metadata_dict)
+#create an empty list that will hold dictionaries representing metadata records.
 id_coords_list_of_tuples = []
+#iterate through the records in the main dictionary and append records with geobox values to the list.
 for record in metadata_dict.keys():
     if type(metadata_dict[record]['geoBox']) == str:
         try:
+            #check if the record has a metadata creation date greater than 2017
             if int(metadata_dict[record]['metadatacreationdate'][:4])>2017:
                 active = '<i class="material-icons md-24 right">whatshot</i>'
             else:
                 active = ''
         except:
+            #call it inactive if not.
             active = 'inactive'
         try:
+            #assign colors for the markers representing metadata records.
             s1 = set(metadata_dict[record]['title'].upper().split())
             s2 = set(['BUOY'])
             if s1.intersection(s2):
                 color = 'blue'
             else:
                 color = 'red'
-            # print(active)
+            #add the record to the list of records.
             id_coords_list_of_tuples.append([metadata_dict[record]['id'],float(metadata_dict[record]['geoBox'].split()[0]),float(metadata_dict[record]['geoBox'].split()[2]),1, metadata_dict[record]['title'], metadata_dict[record]['link'].split()[0], color, active])
         except:
+            #don't ad the record if it does not meet requirements
             pass
-# metadata_dict['record']['metadatacreationdate'], metadata_dict['record']['datasetcreationdate']
-# print(id_coords_list_of_tuples)
 
-
+#The following class defines the search form.
 class SearchForm(FlaskForm):
+    #a main search term is required and will cause a redirect to the search page with a popup message if not set.
     search = StringField('What is your search term?', validators=[Required()])
     advanced1 = StringField('Title includes')
     advanced2 = StringField('Link includes')
@@ -58,11 +68,13 @@ class SearchForm(FlaskForm):
     advanced4 = StringField('Year range')
     submit = SubmitField('')
     
+#The index route is defined by the index function that renders a template with a search form.
 @app.route('/')
 def index():
     searchForm = SearchForm()
     return render_template('searchform.html', form=searchForm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples))
 
+#The result route is defined by the resultSearchForm function that renders a results page template and uses the search form again.
 @app.route('/result', methods = ['GET', 'POST'])
 def resultSearchForm():
     form=SearchForm(request.form)
@@ -72,17 +84,16 @@ def resultSearchForm():
         # if there are no inputs in the advanced search fields
         if (form.advanced1.data == "" and form.advanced2.data == "" and form.advanced3.data == "" and form.advanced4.data == ""):
             results = es_conn.search(index="metadata", body={"query": {"match": {'keyword':searchTerm}}})
-            #results = es_conn.search(index="metadata", doc_type = 'record', body={"query": {"multi_match": {'query': searchTerm, 'fields': ['schema', 'title', 'abstract', 'keyword']}}})
+            
         else:
+            #take values from the advances search fields and assign to variables.
             titleSearch = form.advanced1.data
             linkSearch = form.advanced2.data
             abstractSearch = form.advanced3.data
             yearSearch = form.advanced4.data
 
-            #bodyString2 = {"query": { "bool": { "must": [ { "range": { float("metadatacreationdate"[0:4]): float(yearSearch[0:4])-float(yearSearch[5:9]) }}, { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
-
-            #bodyString2 = {"query": { "bool": { "must": [ { "range": { float("metadatacreationdate"[0:4]): { "gte": int(yearSearch[0:4]), "lte": int(yearSearch[5:9]) }}}, { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
-
+            
+            #The following block determines logic for creating a search string and sending to AWS ElasticSearch.
             if (titleSearch and linkSearch and abstractSearch):
 
                 bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "title": titleSearch }}, { "match": { "link": linkSearch }}, { "match": { "abstract": abstractSearch}}]}}}
@@ -116,23 +127,21 @@ def resultSearchForm():
             
             
         
-        #for item in results.keys:
-        #    print (item)
+        #result plot list is sent to the results page so that markers can be plotted on the smaller map representing results.
         resultPlotList = []
 
+        #Iterate through the results and append 'geolist' values to resultPlotList
         for hit in results['hits']['hits']:
             try:
                 hit['geoList'] = hit['_source']['geoBox'].split()
                 hit['geoList'] = [float(i) for i in hit['geoList']]
                 hit['geoList'].append(hit['_source']['title'])
-                #print(hit['geoList'])
+                
       
                 resultPlotList.append(hit['geoList'])
             except:
                 pass
-            # print(hit['geoList'])
-             
-        # print(resultPlotList)
+
 
 
         return render_template('result.html', searchTerm=searchTerm, api_key=API_KEY, id_coords_list_of_tuples=json.dumps(id_coords_list_of_tuples), results=results, results_len=len(results), searchResults=json.dumps(resultPlotList),form=form)
