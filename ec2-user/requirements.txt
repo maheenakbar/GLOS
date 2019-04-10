@@ -1,0 +1,8 @@
+elasticsearch==6.3.1
+Flask==1.0.2
+Flask-WTF==0.14.2
+Jinja2==2.10
+numpy==1.16.2
+pandas==0.24.2
+requests==1.2.3
+WTForms==2.2.1

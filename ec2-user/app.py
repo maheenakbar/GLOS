@@ -73,7 +73,6 @@ def resultSearchForm():
         if (form.advanced1.data == "" and form.advanced2.data == "" and form.advanced3.data == "" and form.advanced4.data == ""):
             results = es_conn.search(index="metadata", body={"query": {"match": {'keyword':searchTerm}}})
             #results = es_conn.search(index="metadata", doc_type = 'record', body={"query": {"multi_match": {'query': searchTerm, 'fields': ['schema', 'title', 'abstract', 'keyword']}}})
-
         else:
             titleSearch = form.advanced1.data
             linkSearch = form.advanced2.data

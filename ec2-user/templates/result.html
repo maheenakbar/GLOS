@@ -161,13 +161,6 @@ function setMarkers(map) {
     </script>
 </div>
 
-<!-- {%for hit in results['hits']['hits'] %}
-  {% if (hit['_source']['metadatacreationdate'] == '2017' or hit['_source']['metadatacreationdate'] == '2018' or hit['_source']['metadatacreationdate'] == '2019') %}
-  <p>yep</p>
-  {% endif %}
-
-{%endfor%} -->
-
 <div class="col l9 s12">
       <div class="w3-container">
       <h2>View your search results here:</h2>
@@ -182,10 +175,11 @@ function setMarkers(map) {
             {%endfor%}
           </div>
           <p>{{ hit['_source']['abstract'] }}</p>
-          {% if (hit['_source']['metadatacreationdate'][:4] == '2017' or hit['_source']['metadatacreationdate'][:4] == '2018' or hit['_source']['metadatacreationdate'][:4] == '2019') %}
-            <i class="material-icons md-64 right">whatshot</i>
+          {% if (hit['_source']['metadatacreationdate'] != None)  %}
+            {% if (hit['_source']['metadatacreationdate'][:4] == '2017' or hit['_source']['metadatacreationdate'][:4] == '2018' or hit['_source']['metadatacreationdate'][:4] == '2019') %}
+              <i class="material-icons md-64 right">whatshot</i>
+            {% endif %}
           {% endif %}
-          <!-- <p>{{ hit['_source']['metadatacreationdate'][:4] }}</p> -->
         </div>
         </a>
       {%endfor%} 
