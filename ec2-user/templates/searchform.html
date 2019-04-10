@@ -165,7 +165,7 @@ src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
               </li>
             </ul>
             <!-- <a class="waves-effect waves-light btn">{{ form.submit() }}</a> -->
-            <button class="btn waves-effect waves-light cyan darken-1" type="submit" name="action">{{ form.submit() }}
+            <button class="btn waves-effect waves-light cyan darken-1" type="submit" name="action" value="custom">{{ form.submit() }}
     <i class="material-icons right">send</i>
   </button>
             
@@ -177,27 +177,39 @@ src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
     <div class="col s4">
       <div class="card cyan darken-1">
         <div class="card-content white-text">
+          <form method="POST" action="/result">
           <span class="card-title">How healthy are The Great Lakes?</span>
         </div>
-          <a class="btn-floating halfway-fab waves-effect waves-light blue lighten-2"><i class="material-icons">send</i></a>
+          <button class="btn-floating halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="health">{{ form.submit() }}
+    <i class="material-icons right">send</i>
       </div>
+    </button>
+  </form>
     </div>
     
     <div class="col s4">
       <div class="card cyan darken-2">
         <div class="card-content white-text">
+          <form method="POST" action="/result"
           <span class="card-title">How cold is Lake Erie?</span>
         </div>
-        <a class="btn-floating halfway-fab waves-effect waves-light blue lighten-2"><i class="material-icons">send</i></a>
+        <button class="btn-floating halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="cold">{{ form.submit() }}
+    <i class="material-icons right">send</i>
       </div>
+    </button>
+  </form>
     </div>
     <div class="col s4">
       <div class="card cyan darken-3">
         <div class="card-content white-text">
+          <form method="POST" action="/result"
           <span class="card-title">How's the fishing today?</span>
         </div>
-        <a class="btn-floating halfway-fab waves-effect waves-light blue lighten-2"><i class="material-icons">send</i></a>
+        <button class="btn-floating halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="fishing">{{ form.submit() }}
+    <i class="material-icons right">send</i>
       </div>
+    </button>
+  </form>
     </div>
   </div>
 </div>
