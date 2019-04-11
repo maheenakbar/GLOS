@@ -174,7 +174,7 @@ function setMarkers(map) {
           <h1 class="results">{{ hit['_source']['title'] }}</h1>
           <div class="w3-section">
             {%for kw in hit['_source']['keyword'].split(',') %}
-            <button class="button card-keywords">{{ kw }}</button>
+            <button class="button card-keywords" type="submit" name="action" value="custom">{{ kw }}</button>
             {%endfor%}
           </div>
           <p>{{ hit['_source']['abstract'] }}</p>
