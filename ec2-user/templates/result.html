@@ -83,7 +83,10 @@
             {% endfor %}
             <div class="input-field">
               <p>{{ form.search.label }}{{ form.search() }}</p>
-        </div>
+            </div>
+          <button class="btn waves-effect waves-light cyan darken-1" type="submit" name="action" value="custom">{{ form.submit() }}
+    <i class="material-icons right">send</i>
+  </button>
 
         <!-- <p>{{id_coords_list_of_tuples}}</p> -->
       <!-- </div> -->
