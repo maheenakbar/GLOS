@@ -86,12 +86,18 @@ def quality_score(df):
             qs += 2
             
         try:
-            date = rows.metadatacreationdate
-            year = int(date[3])
-        
+            date = row[1]['metadatacreationdate']
+            year = int(date[:4])
+            year = datetime.today().year - year
+            if year < 2:
+                qs += 6
+            elif year >=2 and year < 4:
+                qs += 4
+            elif year >= 4 and year < 6:
+                qs += 2
+            
         except:
-            year = 0
-        qs += year
+            pass
 
         df.at[row[0], 'Quality Score'] = qs
     
