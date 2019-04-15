@@ -9,6 +9,7 @@ from elasticsearch.helpers import bulk
 import numbers
 import math
 import certifi
+from datetime import datetime
 
 host_url = ['https://search-glos-metadata-jy4xxxs6o26fgmdj7guj32nvje.us-east-2.es.amazonaws.com']
 
