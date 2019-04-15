@@ -1,10 +1,6 @@
 ##This script should only be run 1 time unless the index needs to be recreated
 
-import elasticsearch
 from elasticsearch import Elasticsearch
-import json
-import requests
-import pandas as pd
 
 #This is where you put the AWS Elasticsearch Endpoint
 host_url = ['https://search-glos-metadata-jy4xxxs6o26fgmdj7guj32nvje.us-east-2.es.amazonaws.com']
