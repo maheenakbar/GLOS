@@ -124,6 +124,8 @@ def resultSearchForm():
 					bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "abstract": abstractSearch}}]}}}
 					results = es_conn.search(index="metadata", body=bodyString)
 
+		# the next three elif blocks are for when one of the canned queries is clicked on, it searches with specific terms related
+		# to the canned query
 		elif request.form['action'] == 'health':
 			searchTerm = "health"
 			bodyString = {"query": { "bool": { "must": [ { "match": { "keyword": searchTerm }}, { "match": { "abstract": "great lakes"}}]}}}
