@@ -25,6 +25,7 @@
       .material-icons.md-18 { font-size: 18px; }
       .material-icons.md-24 { font-size: 24px; color: red;}
       .material-icons.md-36 { font-size: 36px; }
+      .material-icons.md-48 { font-size: 48px; }
       .material-icons.md-64 { font-size: 64px; color: red; }
     </style>
   </head>
@@ -148,6 +149,7 @@ src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
               
             
             <!-- https://materializecss.com/collapsible.html -->
+            <!-- Materialize colapsible menu for advanced search options contains advanced search fields -->
             <ul class="collapsible">
               <li>
                 <div class="collapsible-header">
@@ -164,15 +166,16 @@ src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
                   </div>
               </li>
             </ul>
-            <!-- <a class="waves-effect waves-light btn">{{ form.submit() }}</a> -->
+            <!-- Button for form submission -->
             <button class="btn waves-effect waves-light cyan darken-1" type="submit" name="action" value="custom">{{ form.submit() }}
-    <i class="material-icons right">send</i>
+    <i class="material-icons">send</i>
   </button>
             
             <script>$('.collapsible').collapsible();</script>
             </div>
         </form>
 <!-- cards -->
+<!-- cards for canned search are arranged in columns and each have their own button -->
 <div class="row">
     <div class="col s4">
       <div class="card cyan darken-1">
@@ -180,21 +183,22 @@ src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
           <form method="POST" action="/result">
           <span class="card-title">How healthy are The Great Lakes?</span>
         </div>
-          <button class="btn-floating halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="health">{{ form.submit() }}
-    <i class="material-icons right">send</i>
+        <!-- each card button has a specific value that is checked in app.py -->
+          <button class="btn-floating btn-large halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="health">{{ form.submit() }}
+    <i class="material-icons md-48">send</i>
       </div>
     </button>
   </form>
     </div>
-    
+    <!-- IMPORTANT - currently, if a user clicks on the upper part of a button, the button sends an empty form submission and throws an error -->
     <div class="col s4">
       <div class="card cyan darken-2">
         <div class="card-content white-text">
           <form method="POST" action="/result"
           <span class="card-title">How cold is Lake Erie?</span>
         </div>
-        <button class="btn-floating halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="cold">{{ form.submit() }}
-    <i class="material-icons right">send</i>
+        <button class="btn-floating btn-large halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="cold">{{ form.submit() }}
+    <i class="material-icons md-48">send</i>
       </div>
     </button>
   </form>
@@ -205,8 +209,8 @@ src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
           <form method="POST" action="/result"
           <span class="card-title">How's the fishing today?</span>
         </div>
-        <button class="btn-floating halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="fishing">{{ form.submit() }}
-    <i class="material-icons right">send</i>
+        <button class="btn-floating btn-large halfway-fab waves-effect waves-light blue lighten-2" type="submit" name="action" value="fishing">{{ form.submit() }}
+        <i class="material-icons md-48">send</i>
       </div>
     </button>
   </form>
